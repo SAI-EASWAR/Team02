@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Projects</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        @media (max-width: 600px) {
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
+            th {
+                display: none; /* Hide header on small screens */
+            }
+            tr {
+                margin-bottom: 10px; /* Add space between rows */
+                border: 1px solid #ddd; /* Add border to rows */
+            }
+            td {
+                text-align: right; /* Align text to the right */
+                position: relative;
+                padding-left: 50%; /* Create space for labels */
+            }
+            td::before {
+                content: attr(data-label); /* Use data-label for headers */
+                position: absolute;
+                left: 10px; /* Position label */
+                width: calc(50% - 20px);
+                padding-right: 10px; /* Space on right for text */
+                white-space: nowrap; /* Prevent wrapping */
+                font-weight: bold; /* Bold labels */
+                text-align: left; /* Align labels to the left */
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>All Projects</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Project ID</th>
+                <th>Project Name</th>
+                <th>Description</th>
+                <th>Owner</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Revised End Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for project in projects %}
+            <tr>
+                <td data-label="Project ID">{{ project.project_id }}</td>
+                <td data-label="Project Name">{{ project.project_name }}</td>
+                <td data-label="Description">{{ project.project_description }}</td>
+                <td data-label="Owner">{{ project.project_owner }}</td>
+                <td data-label="Start Date">{{ project.start_date }}</td>
+                <td data-label="End Date">{{ project.end_date }}</td>
+                <td data-label="Revised End Date">{{ project.revised_end_date }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
