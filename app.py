@@ -8,8 +8,8 @@ db = SQLAlchemy(app)
 
 # Define the Project model
 class Project(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    project_id = db.Column(db.String(50), unique=True, nullable=False)
+    #id = db.Column(db.Integer, primary_key=True)
+    project_id = db.Column(db.Integer, primary_key=True)
     project_name = db.Column(db.String(100), nullable=False)
     project_description = db.Column(db.Text, nullable=False)
     project_owner = db.Column(db.String(50), nullable=False)
