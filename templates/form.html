@@ -3,77 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create New Project</title>
+    <title>Project Details Form</title>
     <style>
-        /* Add your styling here */
         body {
             font-family: Arial, sans-serif;
-            background-color: #e9edf1;
+            background-color: #f4f4f4;
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
         }
+
         .form-container {
-            max-width: 500px;
-            width: 100%;
+            width: 50%;
+            margin: 50px auto;
+            background-color: #fffdd0; /* Cream color */
             padding: 20px;
-            border: 1px solid #ddd;
             border-radius: 8px;
-            background-color: #ffffff;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Add shadow for the box effect */
+            border: 1px solid #ddd; /* Optional border for clarity */
         }
-        .form-container h1 {
+
+        h1 {
             text-align: center;
-            font-size: 24px;
             color: #333;
-            margin-bottom: 20px;
         }
+
         .form-group {
             margin-bottom: 15px;
-            display: flex;
-            flex-direction: column;
         }
-        .form-group label {
-            font-weight: bold;
+
+        label {
+            display: inline-block;
             margin-bottom: 5px;
             color: #555;
         }
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        textarea {
+            width: 50%;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
-            font-size: 14px;
-            color: #333;
             box-sizing: border-box;
         }
-        .form-group input[type="date"] {
-            padding-right: 5px;
+
+        textarea {
+            resize: vertical;
         }
-        .btn-submit {
-            width: 100%;
-            background-color: #4CAF50;
+
+        button {
+            display: block;
+            margin: 10px auto;
+            padding: 15px 25px; /* Increased padding for a larger button */
+            background-color: #28a745;
             color: white;
-            padding: 12px;
             border: none;
-            border-radius: 4px;
-            font-size: 16px;
+            border-radius: 5px;
             cursor: pointer;
+            width: 20%; /* Increased width for a larger button */
+            font-size: 16px; /* Increased font size for better visibility */
         }
-        .btn-submit:hover {
-            background-color: #45a049;
+
+        button:hover {
+            background-color: #4cae4c;
         }
-    
+
+        .sprint-dropdown, .user-story-fields {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .sprint-dropdown label, .user-story-fields label {
+            margin-right: 10px;
+        }
+
+        .sprint-dropdown input, .user-story-fields input {
+            margin-right: 20px;
+        }
     </style>
 </head>
 <body>
 <div class="form-container">
-    <h1>Create New Project</h1>
+    <h1>Project Details</h1>
     <form action="/create_project" method="POST">
         <div class="form-group">
             <label for="project_id">Project ID</label>
@@ -107,8 +120,112 @@
             <label for="revised_end_date">Revised End Date</label>
             <input type="date" id="revised_end_date" name="revised_end_date">
         </div>
-        <button type="submit" class="btn-submit">Create Project</button>
+        <div class="form-group">
+            <label for="status">Status</label>
+            <select id="status" name="status" required>
+                <option value="">Select Status</option>
+                <option value="On Hold">On Hold</option>
+                <option value="Active">Active</option>
+                <option value="Completed">Completed</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="sprintCount">Number of Sprints</label>
+            <input type="number" id="sprintCount" name="sprintCount" placeholder="Enter number of sprints" min="1">
+            <div id="sprintFields" class="sprint-fields"></div>
+        </div>
+        <div class="form-group">
+            <label for="user_stories">Number of User Stories</label>
+            <input type="number" id="user_stories" name="user_stories" required>
+            <div id="userStoryFields"></div>
+        </div>
+        <button type="submit" class="btn-submit">Add Project</button>
     </form>
 </div>
+
+<script>
+    function generateSprintFields() {
+        const sprintCount = document.getElementById('sprintCount').value;
+        const sprintFieldsContainer = document.getElementById('sprintFields');
+        sprintFieldsContainer.innerHTML = '';
+
+        for (let i = 1; i <= sprintCount; i++) {
+            const sprintDiv = document.createElement('div');
+            sprintDiv.className = 'sprint-dropdown';
+
+            const sprintIdLabel = document.createElement('label');
+            sprintIdLabel.textContent = `Sprint ${i} ID: `;
+            sprintDiv.appendChild(sprintIdLabel);
+
+            const sprintIdInput = document.createElement('input');
+            sprintIdInput.type = 'text';
+            sprintIdInput.name = `sprint_${i}_id`;
+            sprintDiv.appendChild(sprintIdInput);
+
+            const startDateLabel = document.createElement('label');
+            startDateLabel.textContent = `Start Date: `;
+            sprintDiv.appendChild(startDateLabel);
+
+            const startDateInput = document.createElement('input');
+            startDateInput.type = 'date';
+            startDateInput.name = `sprint_${i}_start_date`;
+            sprintDiv.appendChild(startDateInput);
+
+            const endDateLabel = document.createElement('label');
+            endDateLabel.textContent = `End Date: `;
+            sprintDiv.appendChild(endDateLabel);
+
+            const endDateInput = document.createElement('input');
+            endDateInput.type = 'date';
+            endDateInput.name = `sprint_${i}_end_date`;
+            sprintDiv.appendChild(endDateInput);
+
+            sprintFieldsContainer.appendChild(sprintDiv);
+        }
+    }
+
+    function generateUserStoryFields() {
+        const userStoryCount = document.getElementById('user_stories').value;
+        const userStoryFieldsContainer = document.getElementById('userStoryFields');
+        userStoryFieldsContainer.innerHTML = '';
+
+        for (let i = 1; i <= userStoryCount; i++) {
+            const storyDiv = document.createElement('div');
+            storyDiv.className = 'user-story-fields';
+
+            const storyIdLabel = document.createElement('label');
+            storyIdLabel.textContent = `Story ${i} ID: `;
+            storyDiv.appendChild(storyIdLabel);
+
+            const storyIdInput = document.createElement('input');
+            storyIdInput.type = 'text';
+            storyIdInput.name = `story_${i}_id`;
+            storyDiv.appendChild(storyIdInput);
+
+            const storyLabel = document.createElement('label');
+            storyLabel.textContent = `Title: `;
+            storyDiv.appendChild(storyLabel);
+
+            const storyInput = document.createElement('input');
+            storyInput.type = 'text';
+            storyInput.name = `story_${i}_title`;
+            storyDiv.appendChild(storyInput);
+
+            const effortsLabel = document.createElement('label');
+            effortsLabel.textContent = `Efforts: `;
+            storyDiv.appendChild(effortsLabel);
+
+            const effortsInput = document.createElement('input');
+            effortsInput.type = 'text';
+            effortsInput.name = `story_${i}_efforts`;
+            storyDiv.appendChild(effortsInput);
+
+            userStoryFieldsContainer.appendChild(storyDiv);
+        }
+    }
+
+    document.getElementById('sprintCount').addEventListener('input', generateSprintFields);
+    document.getElementById('user_stories').addEventListener('input', generateUserStoryFields);
+</script>
 </body>
 </html>
