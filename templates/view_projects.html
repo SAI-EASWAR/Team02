@@ -32,6 +32,25 @@
         tr:hover {
             background-color: #f1f1f1;
         }
+        .section-title {
+            margin-top: 30px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+        .nested-table {
+            margin-top: 10px;
+            width: 90%;
+            margin-left: 5%;
+            border: 1px solid #ddd;
+        }
+        .nested-table th {
+            background-color: #6c757d;
+            color: white;
+        }
+        .nested-table td {
+            text-align: center;
+        }
         @media (max-width: 600px) {
             table, thead, tbody, th, td, tr {
                 display: block;
@@ -73,6 +92,7 @@
                 <th>Start Date</th>
                 <th>End Date</th>
                 <th>Revised End Date</th>
+                <th>Status</th>
             </tr>
         </thead>
         <tbody>
@@ -85,6 +105,50 @@
                 <td data-label="Start Date">{{ project.start_date }}</td>
                 <td data-label="End Date">{{ project.end_date }}</td>
                 <td data-label="Revised End Date">{{ project.revised_end_date }}</td>
+                <td data-label="Status">{{ project.status }}</td>
+            </tr>
+            <tr>
+                <td colspan="8">
+                    <div class="section-title">Sprints</div>
+                    <table class="nested-table">
+                        <thead>
+                            <tr>
+                                <th>Sprint ID</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for sprint in project.sprints %}
+                            <tr>
+                                <td data-label="Sprint ID">{{ sprint.sprint_id }}</td>
+                                <td data-label="Start Date">{{ sprint.start_date }}</td>
+                                <td data-label="End Date">{{ sprint.end_date }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <div class="section-title">User Stories</div>
+                    <table class="nested-table">
+                        <thead>
+                            <tr>
+                                <th>Story ID</th>
+                                <th>Title</th>
+                                <th>Efforts</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for story in project.user_stories %}
+                            <tr>
+                                <td data-label="Story ID">{{ story.story_id }}</td>
+                                <td data-label="Title">{{ story.title }}</td>
+                                <td data-label="Efforts">{{ story.efforts }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
