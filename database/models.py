@@ -4,14 +4,15 @@ from datetime import datetime
 
 class Sprint(db.Model):
     __tablename__ = 'sprints'
-    sprint_id = db.Column(db.Integer, primary_key=True)
+    #sprint_id = db.Column(db.Integer, primary_key=True)
+    sprint_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     start_date = db.Column(db.Date, nullable=False)
     end_date = db.Column(db.Date, nullable=False)
     project_id = db.Column(db.Integer, db.ForeignKey('projects.project_id'), nullable=False)
 
 class UserStory(db.Model):
     __tablename__ = 'user_stories'
-    story_id = db.Column(db.Integer, primary_key=True)
+    story_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(200), nullable=False)
     efforts = db.Column(db.Integer, nullable=True)
     project_id = db.Column(db.Integer, db.ForeignKey('projects.project_id'), nullable=False)
